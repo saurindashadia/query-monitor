@@ -83,11 +83,13 @@ class QM_DB extends wpdb {
 			return false;
 		}
 
-		if ( $this->show_errors ) {
-			$this->hide_errors();
-		}
+		$show_errors = $this->hide_errors();
 
 		$result = parent::query( $query );
+
+		if ( $show_errors ) {
+			$this->show_errors();
+		}
 
 		if ( ! SAVEQUERIES ) {
 			return $result;
