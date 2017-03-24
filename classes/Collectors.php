@@ -53,8 +53,10 @@ class QM_Collectors implements IteratorAggregate {
 			return;
 		}
 		foreach ( $this as $collector ) {
+			$timer = new QM_Timer;
 			$collector->tear_down();
 			$collector->process();
+			$collector->set_timer( $timer->stop() );
 		}
 		$this->processed = true;
 	}

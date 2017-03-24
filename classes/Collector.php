@@ -21,6 +21,7 @@ abstract class QM_Collector {
 		'types'           => array(),
 		'component_times' => array(),
 	);
+	protected $timer;
 
 	public function __construct() {}
 
@@ -119,6 +120,14 @@ abstract class QM_Collector {
 	public function process() {}
 
 	public function tear_down() {}
+
+	public function get_timer() {
+		return $this->timer;
+	}
+
+	public function set_timer( QM_Timer $timer ) {
+		$this->timer = $timer;
+	}
 
 }
 }

@@ -274,6 +274,124 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		echo '</table>';
 		echo '</div>';
 
+
+
+		echo '<div class="qm qm-half" id="qm-self">';
+		echo '<table cellspacing="0">';
+		echo '<thead>';
+		echo '<tr>';
+		echo '<th>' . esc_html__( 'Self Awareness', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'Data', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'JSON', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num" colspan="2">' . esc_html__( 'Processing', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num" colspan="2">' . esc_html__( 'Output', 'query-monitor' ) . '</th>';
+		echo '</tr>';
+		echo '<tr>';
+		echo '<th>&nbsp;</th>';
+		echo '<th class="qm-num">' . esc_html__( 'kB', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'kB', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'ms', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'kB', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'ms', 'query-monitor' ) . '</th>';
+		echo '<th class="qm-num">' . esc_html__( 'kB', 'query-monitor' ) . '</th>';
+		echo '</tr>';
+		echo '</thead>';
+		echo '<tbody>';
+
+		$time = $memory = array(
+			'data'       => 0,
+			'json'       => 0,
+			'processing' => 0,
+			'output'     => 0,
+		);
+
+		foreach ( $this->outputters as $outputter ) {
+
+			$collector = $outputter->get_collector();
+
+			$ct = $collector->get_timer();
+			$ot = $outputter->get_timer();
+
+			$ctime = $ct->get_time();
+			$time['processing'] += $ctime;
+
+			$cmemory = $ct->get_memory();
+			$memory['processing'] += $cmemory;
+
+			$otime = $ot->get_time();
+			$time['output'] += $otime;
+
+			$omemory = $ot->get_memory();
+			$memory['output'] += $omemory;
+
+			if ( $collector instanceof QM_Collector_Debug_Bar ) {
+
+				$data = '-';
+				$json = '-';
+
+			} else {
+
+				$cdata = $collector->get_data();
+
+				$data_size = self::size( $cdata );
+
+				if ( $data_size instanceof Exception ) {
+					$data = $data_size->getMessage();
+				} elseif ( ! is_numeric( $data_size ) ) {
+					$data = $data_size;
+				} else {
+					$memory['data'] += $data_size;
+					$data = number_format_i18n( $data_size / 1024, 1 );
+				}
+
+				$json_size = mb_strlen( wp_json_encode( $cdata ) );
+				$memory['json'] += $json_size;
+				$json = number_format_i18n( $json_size / 1024, 1 );
+
+			}
+
+			echo '<tr>';
+
+			echo '<td>' . $collector->name() . '</td>';
+
+			echo '<td class="qm-num">' . esc_html( $data ) . '</td>';
+			echo '<td class="qm-num">' . esc_html( $json ) . '</td>';
+
+			echo '<td class="qm-num">' . number_format_i18n( $ctime*1000, 1 ) . '</td>';
+			echo '<td class="qm-num">' . number_format_i18n( $cmemory/1024, 1 ) . '</td>';
+
+			echo '<td class="qm-num">' . number_format_i18n( $otime*1000, 1 ) . '</td>';
+			echo '<td class="qm-num">' . number_format_i18n( $omemory/1024, 1 ) . '</td>';
+
+			echo '</tr>';
+
+		}
+
+		echo '</tbody>';
+
+		echo '<tfoot>';
+
+		echo '<tr>';
+
+		echo '<td style="text-align:right !important">' . __( 'Total', 'query-monitor' ) . '</td>';
+
+		echo '<td class="qm-num">' . number_format_i18n( $memory['data']/1024, 1 ) . '</td>';
+		echo '<td class="qm-num">' . number_format_i18n( $memory['json']/1024, 1 ) . '</td>';
+
+		echo '<td class="qm-num">' . number_format_i18n( $time['processing']*1000, 1 ) . '</td>';
+		echo '<td class="qm-num">' . number_format_i18n( $memory['processing']/1024, 1 ) . '</td>';
+
+		echo '<td class="qm-num">' . number_format_i18n( $time['output']*1000, 1 ) . '</td>';
+		echo '<td class="qm-num">' . number_format_i18n( $memory['output']/1024, 1 ) . '</td>';
+
+		echo '</tr>';
+
+		echo '</tfoot>';
+
+		echo '</table>';
+		echo '</div>';
+
+
 		echo '</div>';
 		echo '</div>';
 
@@ -293,6 +411,17 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 		<?php
 		echo '</script>' . "\n\n";
 
+	}
+
+	protected static function size( $var ) {
+		$start_memory = memory_get_usage();
+		try {
+			$var = unserialize( serialize( $var ) );
+		} catch ( Exception $e ) {
+			// return '-';
+			return $e;
+		}
+		return memory_get_usage() - $start_memory - ( PHP_INT_SIZE * 8 );
 	}
 
 	public function js_admin_bar_menu() {

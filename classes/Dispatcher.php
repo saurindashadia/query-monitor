@@ -59,7 +59,9 @@ abstract class QM_Dispatcher {
 
 		/* @var QM_Output[] */
 		foreach ( $this->outputters as $id => $outputter ) {
+			$timer = new QM_Timer;
 			$out[ $id ] = $outputter;
+			$outputter->set_timer( $timer->stop() );
 		}
 
 		return $out;
