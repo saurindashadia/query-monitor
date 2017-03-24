@@ -142,12 +142,65 @@ class QM_Collector_Request extends QM_Collector {
 
 		}
 
+		$this->data['context'] = $this->get_context();
 		if ( ! is_null( $qo ) ) {
 			$this->data['queried_object']['data'] = $qo;
 		}
 
 		$this->data['request_method'] = strtoupper( $_SERVER['REQUEST_METHOD'] );
 
+	}
+
+	public function get_context() {
+		switch ( true ) {
+
+			case is_feed():
+				$context = 'feed';
+				break;
+
+			case QM_Util::is_login():
+				$context = 'login';
+				break;
+
+			case QM_Util::is_ajax():
+				$context = 'ajax';
+				break;
+
+			case QM_Util::is_cli():
+				$context = 'cli';
+				break;
+
+			case QM_Util::is_cron():
+				$context = 'cron';
+				break;
+
+			case QM_Util::is_rest():
+				$context = 'rest';
+				break;
+
+			case QM_Util::is_xmlrpc():
+				$context = 'xmlrpc';
+				break;
+
+			case ( function_exists( 'is_customize_preview' ) && is_customize_preview() ):
+				$context = 'customize-preview';
+				break;
+
+			case ( function_exists( 'is_embed' ) && is_embed() ):
+				$context = 'embed';
+				break;
+
+			case is_admin():
+				$context = 'admin';
+				break;
+
+			default:
+				$context = 'front-end';
+				break;
+
+		}
+
+		return apply_filters( 'qm/request/context', $context, $this );
 	}
 
 }

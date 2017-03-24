@@ -252,10 +252,27 @@ class QM_Util {
 	}
 
 	public static function is_ajax() {
-		if ( defined( 'DOING_AJAX' ) and DOING_AJAX ) {
-			return true;
-		}
-		return false;
+		return ( defined( 'DOING_AJAX' ) && DOING_AJAX );
+	}
+
+	public static function is_cron() {
+		return ( defined( 'DOING_CRON' ) && DOING_CRON );
+	}
+
+	public static function is_rest() {
+		return ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+	}
+
+	public static function is_xmlrpc() {
+		return ( defined( 'XMLRPC_REQUEST' ) && XMLRPC_REQUEST );
+	}
+
+	public static function is_cli() {
+		return ( 'cli' === php_sapi_name() );
+	}
+
+	public static function is_login() {
+		return ( did_action( 'login_init' ) );
 	}
 
 	public static function is_async() {
