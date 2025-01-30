@@ -22,7 +22,13 @@ If you use an editor other than VS Code or PhpStorm then you may first need to c
 
 If you're debugging a remote site or using Docker or a virtual machine, you'll need to map the path on the server to its path on your local machine so your editor doesn't try to load a non-existent file. You can do this using a filter on the `qm/output/file_path_map` hook which accepts an array of remote paths and the local path they map to.
 
-For example, if you use the Docker-based development environment that's built in to WordPress core, your path mapping needs to look like this:
+Here are examples for various environments:
+
+### Altis
+
+No need to do anything, the path mapping is handled for you.
+
+### WordPress core development environment
 
 ```php
 add_filter( 'qm/output/file_path_map', function( $map ) {
@@ -31,7 +37,7 @@ add_filter( 'qm/output/file_path_map', function( $map ) {
 } );
 ```
 
-If you use VVV your path mapping needs to look like this:
+### VVV
 
 ```php
 add_filter( 'qm/output/file_path_map', function( $map ) {
@@ -40,7 +46,7 @@ add_filter( 'qm/output/file_path_map', function( $map ) {
 } );
 ```
 
-If you use Chassis or another Vagrant-based VM, your path mapping needs to look like this:
+### Chassis or another Vagrant-based VM
 
 ```php
 add_filter( 'qm/output/file_path_map', function( $map ) {
