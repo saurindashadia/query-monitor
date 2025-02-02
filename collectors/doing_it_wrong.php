@@ -64,7 +64,7 @@ class QM_Collector_Doing_It_Wrong extends QM_DataCollector {
 		remove_filter( 'deprecated_file_trigger_error', array( $this, 'maybe_prevent_error' ) );
 		remove_filter( 'deprecated_argument_trigger_error', array( $this, 'maybe_prevent_error' ) );
 		remove_filter( 'deprecated_hook_trigger_error', array( $this, 'maybe_prevent_error' ) );
-		remove_filter( 'doing_it_wrong_trigger_error', array( $this, 'maybe_prevent_doing_it_wrong_error' ) );
+		remove_filter( 'doing_it_wrong_trigger_error', array( $this, 'maybe_prevent_doing_it_wrong_error' ), 999 );
 	}
 
 	/**
