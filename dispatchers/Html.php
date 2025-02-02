@@ -581,7 +581,6 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 
 			$editors = array(
 				'Default/Xdebug' => '',
-				'Atom' => 'atom',
 				'Netbeans' => 'netbeans',
 				'Nova' => 'nova',
 				'PhpStorm' => 'phpstorm',

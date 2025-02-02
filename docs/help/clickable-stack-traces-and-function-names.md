@@ -14,7 +14,6 @@ You just need to open up the Settings panel in Query Monitor (click the cog next
 
 If you use an editor other than VS Code or PhpStorm then you may first need to configure it so it opens when a certain URL scheme is encountered:
 
-* Atom: [Install the Atom Open package](https://atom.io/packages/open)
 * Sublime Text: [Install the subl-handler package](https://github.com/corysimmons/subl-handler)
 * Netbeans: [Follow these instructions by Simon Wheatley](https://simonwheatley.co.uk/2012/08/clickable-stack-traces-with-netbeans/)
 
