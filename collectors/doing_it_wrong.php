@@ -140,6 +140,10 @@ class QM_Collector_Doing_It_Wrong extends QM_DataCollector {
 			return;
 		}
 
+		if ( $this->is_just_in_time_for_qm_domain( $function_name, $message ) ) {
+			return;
+		}
+
 		$this->collecting = true;
 
 		$trace = new QM_Backtrace( array(
@@ -416,7 +420,6 @@ class QM_Collector_Doing_It_Wrong extends QM_DataCollector {
 	 * @return bool
 	 */
 	protected function is_just_in_time_for_qm_domain( string $function_name, string $message ): bool {
-
 		return $function_name === '_load_textdomain_just_in_time' && strpos( $message, '<code>query-monitor' ) !== false;
 	}
 
