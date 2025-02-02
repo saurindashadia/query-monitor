@@ -579,8 +579,11 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			echo '<p>';
 			echo '<select id="qm-editor-select" name="qm-editor-select" class="qm-filter">';
 
+			$xdebug_format = ini_get( 'xdebug.file_link_format' );
+			$default_label = ! empty( $xdebug_format ) ? 'Xdebug format' : 'None';
+
 			$editors = array(
-				'Default/Xdebug' => '',
+				$default_label => '',
 				'Netbeans' => 'netbeans',
 				'Nova' => 'nova',
 				'PhpStorm' => 'phpstorm',
