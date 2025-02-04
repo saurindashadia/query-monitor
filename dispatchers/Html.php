@@ -577,7 +577,7 @@ class QM_Dispatcher_Html extends QM_Dispatcher {
 			echo '<p>' . esc_html__( 'You can set your editor here, so that when you click on stack trace links the file opens in your editor.', 'query-monitor' ) . '</p>';
 
 			echo '<p>';
-			echo '<select id="qm-editor-select" name="qm-editor-select" class="qm-filter">';
+			echo '<select id="qm-editor-select" name="qm-editor-select" class="qm-select">';
 
 			$xdebug_format = ini_get( 'xdebug.file_link_format' );
 			$default_label = ! empty( $xdebug_format ) ? 'Xdebug format' : 'None';
